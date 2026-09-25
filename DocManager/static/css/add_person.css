@@ -1,0 +1,217 @@
+/* ==========================================
+   ADD PERSON
+   ========================================== */
+
+.add-person-content {
+    padding: 28px 32px 45px;
+}
+
+.page-heading {
+    margin-bottom: 20px;
+}
+
+.page-heading h1 {
+    font-size: 24px;
+    color: #172033;
+    margin-bottom: 5px;
+}
+
+.page-heading p {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+/* ==========================================
+   FORM CARD
+   ========================================== */
+
+.add-person-card {
+    max-width: 900px;
+    background: white;
+    border: 1px solid #e8edf3;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);
+    padding: 25px;
+}
+.form-header {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-bottom: 22px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.form-header-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 9px;
+    background: #e8f1ff;
+    color: #1769e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+}
+
+.form-header h2 {
+    font-size: 16px;
+    color: #172033;
+    margin-bottom: 4px;
+}
+
+.form-header p {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* ==========================================
+   FORM GRID
+   ========================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    color: #475569;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.form-group label span {
+    color: #dc3b3b;
+}
+
+.form-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #dbe3ed;
+    border-radius: 6px;
+    background: white;
+    color: #334155;
+    font-size: 12px;
+    outline: none;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    border-color: #1769e0;
+    box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.08);
+}
+
+.form-input::placeholder {
+    color: #b0bac7;
+}
+
+.form-group small {
+    color: #94a3b8;
+    font-size: 9px;
+}
+
+/* ==========================================
+   ERRORS
+   ========================================== */
+
+.field-error {
+    color: #dc3b3b;
+    font-size: 10px;
+}
+
+.field-error ul {
+    margin: 0;
+    padding-left: 15px;
+}
+
+.form-error {
+    padding: 10px 12px;
+    background: #fff0f0;
+    border: 1px solid #ffd5d5;
+    border-radius: 6px;
+    color: #dc3b3b;
+    font-size: 11px;
+    margin-bottom: 18px;
+}
+
+/* ==========================================
+   ACTIONS
+   ========================================== */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 24px;
+    margin-top: 25px;
+    border-top: 1px solid #eef2f7;
+}
+
+.cancel-button {
+    height: 38px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dbe3ed;
+    border-radius: 6px;
+    color: #64748b;
+    background: white;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.cancel-button:hover {
+    background: #f8fafc;
+}
+
+.save-button {
+    height: 38px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    background: #1769e0;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background: #125bc4;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 700px) {
+    .add-person-content {
+        padding: 20px 15px;
+    }
+    .add-person-card {
+        padding: 18px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+    .cancel-button,
+    .save-button {
+        width: 100%;
+    }
+}

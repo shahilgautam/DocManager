@@ -1,0 +1,368 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Document Type | DocManager</title>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/add_document_type.css' %}">
+
+</head>
+
+
+<body>
+
+    <div class="app-container">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+
+                <i class="bi bi-file-earmark-text"></i>
+
+                <span>DocManager</span>
+
+            </div>
+
+
+            <nav class="sidebar-menu">
+
+                <a href="{% url 'dashboard' %}" class="menu-item">
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <a href="{% url 'people' %}" class="menu-item">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <span>People</span>
+
+                </a>
+
+
+                <a href="{% url 'all_documents' %}" class="menu-item">
+
+                    <i class="bi bi-folder-fill"></i>
+
+                    <span>Documents</span>
+
+                </a>
+
+
+                <a href="{% url 'document_types' %}" class="menu-item active">
+
+                    <i class="bi bi-files"></i>
+
+                    <span>Document Types</span>
+
+                </a>
+
+
+                <a href="{% url 'recent_documents' %}" class="menu-item">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Recent</span>
+                </a>
+
+                <a href="{% url 'trash' %}" class="menu-item">
+
+                    <i class="bi bi-trash3-fill"></i>
+
+                    <span>Trash</span>
+
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <a href="{% url 'settings' %}" class="menu-item">
+
+                    <i class="bi bi-gear-fill"></i>
+
+                    <span>Settings</span>
+
+                </a>
+
+
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- MAIN -->
+
+        <main class="main-content">
+
+
+            <header class="topbar">
+
+                <div class="search-box">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text" placeholder="Search people, documents...">
+
+                </div>
+
+
+                <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+
+            </header>
+
+
+
+            <!-- CONTENT -->
+
+            <section class="add-type-content">
+
+
+                <a href="{% url 'document_types' %}" class="back-link">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to Document Types
+
+                </a>
+
+
+                <div class="page-heading">
+
+                    <h1>
+                        Edit Document Type
+                    </h1>
+
+                    <p>
+                        Update the configuration of this document type.
+                    </p>
+
+                </div>
+
+
+
+                <div class="add-type-card">
+
+
+                    <div class="form-header">
+
+                        <div class="form-header-icon">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                {{ document_type.name }}
+                            </h2>
+
+                            <p>
+                                Modify document type information.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        {% if form.non_field_errors %}
+
+                        <div class="form-error">
+
+                            {{ form.non_field_errors }}
+
+                        </div>
+
+                        {% endif %}
+
+
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label>
+
+                                Document Name
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            {{ form.name }}
+
+
+                            {% if form.name.errors %}
+
+                            <div class="field-error">
+
+                                {{ form.name.errors }}
+
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Description
+                            </label>
+
+                            {{ form.description }}
+
+                        </div>
+
+
+
+                        <!-- GRID -->
+
+                        <div class="form-grid">
+
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Required For
+
+                                    <span>*</span>
+
+                                </label>
+
+
+                                {{ form.required_for }}
+
+                            </div>
+
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Allowed File Types
+                                </label>
+
+
+                                {{ form.allowed_file_types }}
+
+
+                                <small>
+                                    Example: PDF, JPG, PNG
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ACTIVE -->
+
+                        <div class="active-option">
+
+                            {{ form.is_active }}
+
+                            <div>
+
+                                <strong>
+                                    Active document type
+                                </strong>
+
+                                <span>
+                                    Allow this document type to be used for new uploads.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="form-actions">
+
+                            <a href="{% url 'document_types' %}" class="cancel-button">
+
+                                Cancel
+
+                            </a>
+
+
+                            <button type="submit" class="save-button">
+
+                                <i class="bi bi-check-lg"></i>
+
+                                Save Changes
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

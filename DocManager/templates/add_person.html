@@ -1,0 +1,467 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Person | DocManager</title>
+
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <link rel="stylesheet"
+          href="{% static 'css/dashboard.css' %}">
+
+
+    <link rel="stylesheet"
+          href="{% static 'css/profile.css' %}">
+
+
+    <link rel="stylesheet"
+          href="{% static 'css/add_person.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="app-container">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <i class="bi bi-file-earmark-text"></i>
+
+            <span>DocManager</span>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <a href="{% url 'dashboard' %}" class="menu-item">
+
+                <i class="bi bi-grid-1x2-fill"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a href="{% url 'people' %}" class="menu-item active">
+
+                <i class="bi bi-people-fill"></i>
+
+                <span>People</span>
+
+            </a>
+
+
+            <a href="{% url 'all_documents' %}" class="menu-item">
+
+                <i class="bi bi-folder-fill"></i>
+
+                <span>Documents</span>
+
+            </a>
+
+
+            <a href="{% url 'document_types' %}" class="menu-item">
+
+                <i class="bi bi-files"></i>
+
+                <span>Document Types</span>
+
+            </a>
+
+            <a href="{% url 'recent_documents' %}" class="menu-item">
+                <i class="bi bi-clock-history"></i>
+                <span>Recent</span>
+            </a>
+
+            <a href="{% url 'trash' %}" class="menu-item">
+
+                <i class="bi bi-trash3-fill"></i>
+
+                <span>Trash</span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="{% url 'settings' %}" class="menu-item">
+
+                <i class="bi bi-gear-fill"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="search-box">
+
+                <i class="bi bi-search"></i>
+
+                <input
+                    type="text"
+                    placeholder="Search people, documents..."
+                >
+
+            </div>
+
+
+            <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </header>
+
+
+
+        <!-- PAGE CONTENT -->
+
+        <section class="add-person-content">
+
+
+            <a href="{% url 'people' %}" class="back-link">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to People
+
+            </a>
+
+
+
+            <div class="page-heading">
+
+                <div>
+
+                    <h1>Add Person</h1>
+
+                    <p>
+                        Add a new student or employee to the system.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FORM CARD -->
+
+            <div class="add-person-card">
+
+
+                <div class="form-header">
+
+                    <div class="form-header-icon">
+
+                        <i class="bi bi-person-plus"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2>Person Information</h2>
+
+                        <p>
+                            Enter the basic information below.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    {% if form.non_field_errors %}
+
+                        <div class="form-error">
+
+                            {{ form.non_field_errors }}
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <div class="form-grid">
+
+
+                        <!-- PERSON ID -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.person_id.id_for_label }}">
+
+                                Person ID
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            {{ form.person_id }}
+
+
+                            {% if form.person_id.errors %}
+
+                                <div class="field-error">
+
+                                    {{ form.person_id.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <small>
+                                Unique ID such as STU001 or EMP001.
+                            </small>
+
+                        </div>
+
+
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.name.id_for_label }}">
+
+                                Full Name
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            {{ form.name }}
+
+
+                            {% if form.name.errors %}
+
+                                <div class="field-error">
+
+                                    {{ form.name.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- TYPE -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.person_type.id_for_label }}">
+
+                                Person Type
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            {{ form.person_type }}
+
+
+                            {% if form.person_type.errors %}
+
+                                <div class="field-error">
+
+                                    {{ form.person_type.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- DEPARTMENT -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.department.id_for_label }}">
+
+                                Department
+
+                            </label>
+
+
+                            {{ form.department }}
+
+
+                            {% if form.department.errors %}
+
+                                <div class="field-error">
+
+                                    {{ form.department.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- EMAIL -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.email.id_for_label }}">
+
+                                Email
+
+                            </label>
+
+
+                            {{ form.email }}
+
+
+                            {% if form.email.errors %}
+
+                                <div class="field-error">
+
+                                    {{ form.email.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- PHONE -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.phone.id_for_label }}">
+
+                                Phone
+
+                            </label>
+
+
+                            {{ form.phone }}
+
+
+                            {% if form.phone.errors %}
+
+                                <div class="field-error">
+
+                                    {{ form.phone.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- FORM ACTIONS -->
+
+                    <div class="form-actions">
+
+                        <a
+                            href="{% url 'people' %}"
+                            class="cancel-button"
+                        >
+
+                            Cancel
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="save-button"
+                        >
+
+                            <i class="bi bi-check-lg"></i>
+
+                            Add Person
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

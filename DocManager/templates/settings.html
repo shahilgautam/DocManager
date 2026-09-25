@@ -1,0 +1,330 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | DocManager</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard -->
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    <!-- Settings -->
+    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>DocManager</span>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a href="{% url 'dashboard' %}" class="menu-item">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{% url 'people' %}" class="menu-item">
+                    <i class="bi bi-people-fill"></i>
+                    <span>People</span>
+                </a>
+
+                <a href="{% url 'all_documents' %}" class="menu-item">
+                    <i class="bi bi-folder-fill"></i>
+                    <span>Documents</span>
+                </a>
+
+                <a href="{% url 'document_types' %}" class="menu-item">
+                    <i class="bi bi-files"></i>
+                    <span>Document Types</span>
+                </a>
+
+                <a href="{% url 'recent_documents' %}" class="menu-item">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Recent</span>
+                </a>
+
+                <a href="{% url 'trash' %}" class="menu-item">
+                    <i class="bi bi-trash3-fill"></i>
+                    <span>Trash</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <a href="{% url 'settings' %}" class="menu-item active">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Settings</span>
+                </a>
+
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ================= MAIN CONTENT ================= -->
+
+        <main class="main-content">
+
+            <!-- TOPBAR -->
+
+            <header class="topbar">
+
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text"
+                        placeholder="Search people, documents...">
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="profile">
+
+                        <div class="profile-avatar">
+                            {{ profile_user.get_full_name|first|upper }}
+                        </div>
+
+                        <div class="profile-info">
+                            <strong>{{ profile_user.get_full_name|default:profile_user.username }}</strong>
+                            <small>{{ role }}</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- ================= SETTINGS ================= -->
+
+            <section class="settings-content">
+
+                {% if messages %}
+                    <div class="settings-messages">
+                        {% for message in messages %}
+                            <div class="settings-message {{ message.tags }}">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="settings-header">
+
+                    <div>
+                        <h1>Settings</h1>
+
+                        <p>
+                            Manage your DocManager system preferences.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- ADMIN PROFILE -->
+
+                <section class="settings-card">
+
+                    <div class="settings-card-header">
+
+                        <div class="settings-card-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+
+                        <div>
+                            <h2>My Profile</h2>
+                            <p>Manage your DocManager account information.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-grid">
+
+                        <div class="setting-field">
+
+                            <label>Name</label>
+
+                            <div class="setting-value">
+                                {{ profile_user.get_full_name|default:profile_user.username }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-field">
+
+                            <label>Email Address</label>
+
+                            <div class="setting-value">
+                                {{ profile_user.email|default:"Not provided" }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-field">
+
+                            <label>Role</label>
+
+                            <div class="setting-value">
+                                {{ role }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% if profile_user.is_superuser %}
+                    <div class="admin-note">
+                        <i class="bi bi-terminal"></i>
+                        <span>Superuser account changes are managed from the terminal. The DocManager panel cannot edit this account.</span>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'edit_profile' %}" class="settings-button settings-link">
+                        <i class="bi bi-pencil"></i>
+                        Edit Profile
+                    </a>
+                    {% endif %}
+
+                </section>
+                
+                <!-- PROJECT ADMINISTRATORS -->
+                {% if profile_user.is_superuser %}
+                <section class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon purple">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                        <div>
+                            <h2>Users</h2>
+                            <p>Create and manage normal users for DocManager.</p>
+                        </div>
+                    </div>
+
+                    <div class="admin-management-box">
+                        <div>
+                            <strong>Full Access</strong>
+                            <span>Users created here receive full access to DocManager data and features. Only the superuser can manage users.</span>
+                        </div>
+                        <a href="{% url 'project_users' %}" class="settings-button settings-link">
+                            <i class="bi bi-people"></i>
+                            Manage Users
+                        </a>
+                    </div>
+                </section>
+                {% endif %}
+
+                <!-- ABOUT -->
+
+                <section class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon blue">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+                        <div>
+                            <h2>About</h2>
+                            <p>Information about this DocManager installation.</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="setting-field">
+                            <label>Application</label>
+                            <div class="setting-value">DocManager</div>
+                        </div>
+                        <div class="setting-field">
+                            <label>Platform</label>
+                            <div class="setting-value">Django</div>
+                        </div>
+                        <div class="setting-field full-width">
+                            <label>Account</label>
+                            <div class="setting-value">{{ profile_user.username }}</div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- SECURITY -->
+
+                <section class="settings-card">
+
+                    <div class="settings-card-header">
+
+                        <div class="settings-card-icon red">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+
+                        <div>
+                            <h2>Security</h2>
+                            <p>Manage account and system security.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="security-row">
+
+                        <div>
+
+                            <strong>Password</strong>
+
+                            <span>
+                                Change your DocManager password.
+                            </span>
+
+                        </div>
+
+                        {% if profile_user.is_superuser %}
+                        <span class="settings-button secondary" style="opacity:.7;cursor:not-allowed;">
+                            <i class="bi bi-terminal"></i>
+                            Terminal Only
+                        </span>
+                        {% else %}
+                        <a href="{% url 'change_password' %}" class="settings-button secondary settings-link">
+                            <i class="bi bi-key"></i>
+                            Change Password
+                        </a>
+                        {% endif %}
+
+                    </div>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,362 @@
+/* =========================================================
+   PEOPLE PAGE
+   ========================================================= */
+
+.page-content {
+    padding: 30px 32px 40px;
+}
+
+
+/* ---------- HEADER ---------- */
+
+.people-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.people-header h1 {
+    font-size: 25px;
+    color: #172033;
+    margin-bottom: 6px;
+}
+
+.people-header p {
+    font-size: 14px;
+    color: #64748b;
+}
+
+/* ---------- FILTER CARD ---------- */
+
+.filter-card {
+    background: white;
+    border: 1px solid #e8edf3;
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.people-search {
+    flex: 1;
+    height: 40px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    color: #94a3b8;
+}
+
+.people-search input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding-left: 9px;
+    font-size: 12px;
+}
+
+.filter-card select {
+    height: 40px;
+    min-width: 160px;
+    padding: 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    background: white;
+    color: #475569;
+    font-size: 12px;
+    outline: none;
+}
+
+/* ---------- PEOPLE CARD ---------- */
+
+.people-card {
+    background: white;
+    border: 1px solid #e8edf3;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);
+}
+
+.people-card-header {
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.people-card-header h3 {
+    font-size: 15px;
+    color: #172033;
+    margin-bottom: 4px;
+}
+
+.people-card-header p {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.people-count {
+    font-size: 11px;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 6px 10px;
+    border-radius: 20px;
+}
+
+/* ---------- TABLE ---------- */
+
+.people-table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.people-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+}
+
+.people-table th {
+    background: #f8fafc;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #64748b;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.people-table td {
+    padding: 14px 16px;
+    font-size: 12px;
+    color: #475569;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.people-table tbody tr:hover {
+    background: #fafcff;
+}
+
+/* ---------- PERSON ---------- */
+
+.person-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.person-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #e8f1ff;
+    color: #1769e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.person-cell div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.person-cell strong {
+    color: #334155;
+}
+
+.person-cell small {
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+/* ---------- TYPE ---------- */
+
+.type {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.type.employee {
+    background: #e8f1ff;
+    color: #1769e0;
+}
+
+.type.student {
+    background: #f1eaff;
+    color: #7c3aed;
+}
+
+/* ---------- STATUS ---------- */
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.status-badge.complete {
+    background: #e7f8ef;
+    color: #168653;
+}
+
+.status-badge.incomplete {
+    background: #fff0f0;
+    color: #dc3b3b;
+}
+
+/* ---------- ACTIONS ---------- */
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.action-buttons button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    color: #64748b;
+    transition: 0.2s;
+}
+
+.action-buttons button:hover {
+    background: #eef4ff;
+    color: #1769e0;
+}
+
+.action-buttons button:last-child:hover {
+    background: #fff0f0;
+    color: #dc3b3b;
+}
+
+/* ---------- PAGINATION ---------- */
+
+.pagination {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination button {
+    height: 30px;
+    min-width: 30px;
+    padding: 0 9px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 5px;
+    color: #64748b;
+    font-size: 11px;
+}
+
+.pagination button:hover:not(:disabled) {
+    border-color: #1769e0;
+    color: #1769e0;
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination .page-active {
+    background: #1769e0;
+    color: white;
+    border-color: #1769e0;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+    .page-content {
+        padding: 20px 15px;
+    }
+    .people-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .people-header .primary-button {
+        width: 100%;
+        justify-content: center;
+    }
+    .filter-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-card select {
+        width: 100%;
+    }
+}
+.action-link {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    color: #64748b;
+
+    transition: 0.2s;
+}
+
+.action-link:hover {
+    background: #eef4ff;
+
+    color: #1769e0;
+}
+
+
+.empty-people {
+    padding: 60px 20px;
+
+    text-align: center;
+
+    color: #94a3b8;
+}
+
+.empty-people i {
+    display: block;
+
+    font-size: 38px;
+
+    margin-bottom: 12px;
+}
+
+.empty-people h4 {
+    color: #475569;
+
+    font-size: 14px;
+
+    margin-bottom: 5px;
+}
+
+.empty-people p {
+    font-size: 11px;
+}

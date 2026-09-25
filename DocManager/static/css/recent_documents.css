@@ -1,0 +1,532 @@
+/* =========================================================
+   RECENT DOCUMENTS PAGE
+   DocManagement
+========================================================= */
+
+.recent-page {
+    padding: 28px 32px 40px;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.recent-page .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.recent-page .page-header h1 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #172b4d;
+}
+
+.recent-page .page-header h1 i {
+    font-size: 30px;
+    color: #2563eb;
+}
+
+.recent-page .page-header p {
+    margin: 7px 0 0;
+    color: #718096;
+    font-size: 14px;
+}
+
+/* =========================================================
+   ALL DOCUMENTS BUTTON
+========================================================= */
+
+.recent-page .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 11px 18px;
+
+    border-radius: 10px;
+    border: 1px solid #2563eb;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: all 0.2s ease;
+}
+
+.recent-page .btn-primary:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.20);
+}
+
+.recent-page .btn-primary i {
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   DOCUMENT GRID
+========================================================= */
+
+.recent-page .documents-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+/* =========================================================
+   DOCUMENT CARD
+========================================================= */
+
+.recent-page .document-card {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 255px;
+
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6eaf0;
+    border-radius: 16px;
+
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.recent-page .document-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #d5def0;
+
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.10);
+}
+
+
+/* =========================================================
+   FILE ICON
+========================================================= */
+
+.recent-page .document-icon {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 17px;
+
+    border-radius: 13px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 27px;
+}
+
+.recent-page .document-icon i {
+    line-height: 1;
+}
+
+
+/* PDF */
+
+.recent-page .document-card:has(.bi-file-earmark-pdf)
+.document-icon {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+/* Word */
+
+.recent-page .document-card:has(.bi-file-earmark-word)
+.document-icon {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+/* Excel */
+
+.recent-page .document-card:has(.bi-file-earmark-excel)
+.document-icon {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+
+/* Image */
+
+.recent-page .document-card:has(.bi-file-earmark-image)
+.document-icon {
+    background: #faf5ff;
+    color: #9333ea;
+}
+
+
+/* Text */
+
+.recent-page .document-card:has(.bi-file-earmark-text)
+.document-icon {
+    background: #f8fafc;
+    color: #475569;
+}
+
+
+/* =========================================================
+   DOCUMENT INFORMATION
+========================================================= */
+
+.recent-page .document-info {
+    flex: 1;
+}
+
+.recent-page .document-info h3 {
+    margin: 0;
+
+    max-width: 100%;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 16px;
+    font-weight: 650;
+
+    color: #172b4d;
+}
+
+.recent-page .document-info > p {
+    margin: 6px 0 14px;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   PERSON
+========================================================= */
+
+.recent-page .document-person {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 15px;
+}
+
+.recent-page .person-avatar {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e8f0fe;
+    color: #2563eb;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.recent-page .document-person span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+}
+
+
+/* =========================================================
+   META INFORMATION
+========================================================= */
+
+.recent-page .document-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    padding-top: 13px;
+
+    border-top: 1px solid #edf0f4;
+
+    font-size: 12px;
+    color: #64748b;
+}
+
+.recent-page .document-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.recent-page .document-meta i {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   CARD ACTIONS
+========================================================= */
+
+.recent-page .document-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 16px;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.recent-page .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.recent-page .status-submitted {
+    background: #ecfdf3;
+    color: #15803d;
+}
+
+.recent-page .status-rejected {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   OPEN DOCUMENT BUTTON
+========================================================= */
+
+.recent-page .open-document {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #f1f5f9;
+    color: #475569;
+
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
+
+.recent-page .open-document:hover {
+    background: #2563eb;
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+.recent-page .open-document i {
+    font-size: 15px;
+}
+
+
+
+/* =========================================================
+   ACTION GROUP
+========================================================= */
+
+.recent-page .document-actions {
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.recent-page .document-actions .status-badge {
+    margin-right: auto;
+}
+
+.recent-page .document-actions form {
+    margin: 0;
+}
+
+.recent-page .document-delete {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: #fef2f2;
+    color: #dc2626;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.recent-page .document-delete:hover {
+    background: #dc2626;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.recent-page .document-delete i {
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.recent-page .empty-state {
+    min-height: 360px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 50px 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5eaf1;
+    border-radius: 18px;
+
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+
+    text-align: center;
+}
+
+.recent-page .empty-icon {
+    width: 76px;
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 20px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 32px;
+}
+
+.recent-page .empty-state h2 {
+    margin: 0 0 8px;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    color: #172b4d;
+}
+
+.recent-page .empty-state p {
+    margin: 0 0 24px;
+
+    color: #718096;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .recent-page .documents-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 850px) {
+
+    .recent-page {
+        padding: 22px;
+    }
+
+    .recent-page .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .recent-page .documents-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .recent-page {
+        padding: 18px;
+    }
+
+    .recent-page .page-header h1 {
+        font-size: 25px;
+    }
+
+    .recent-page .page-header h1 i {
+        font-size: 25px;
+    }
+
+    .recent-page .document-card {
+        padding: 18px;
+    }
+}

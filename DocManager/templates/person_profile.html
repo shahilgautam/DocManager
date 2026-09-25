@@ -1,0 +1,565 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ person.name }} | DocManager</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+</head>
+
+
+<body>
+
+    <div class="app-container">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+
+                <i class="bi bi-file-earmark-text"></i>
+
+                <span>DocManager</span>
+
+            </div>
+
+
+            <nav class="sidebar-menu">
+
+                <a href="{% url 'dashboard' %}" class="menu-item">
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <a href="{% url 'people' %}" class="menu-item active">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <span>People</span>
+
+                </a>
+
+
+                <a href="{% url 'all_documents' %}" class="menu-item">
+
+                    <i class="bi bi-folder-fill"></i>
+
+                    <span>Documents</span>
+
+                </a>
+
+
+                <a href="{% url 'document_types' %}" class="menu-item">
+
+                    <i class="bi bi-files"></i>
+
+                    <span>Document Types</span>
+
+                </a>
+
+
+                <a href="{% url 'recent_documents' %}" class="menu-item">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Recent</span>
+                </a>
+
+                <a href="{% url 'trash' %}" class="menu-item">
+
+                    <i class="bi bi-trash3-fill"></i>
+
+                    <span>Trash</span>
+
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <a href="{% url 'settings' %}" class="menu-item">
+
+                    <i class="bi bi-gear-fill"></i>
+
+                    <span>Settings</span>
+
+                </a>
+
+
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- MAIN -->
+
+        <main class="main-content">
+
+
+            <!-- TOPBAR -->
+
+            <header class="topbar">
+
+                <div class="search-box">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text" placeholder="Search people, documents...">
+
+                </div>
+
+
+                <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+            </header>
+
+
+
+            <!-- PAGE -->
+
+            <section class="profile-content">
+
+
+                <!-- BACK -->
+
+                <a href="{% url 'people' %}" class="back-link">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to People
+
+                </a>
+
+
+
+                <!-- PERSON HEADER -->
+
+                <div class="person-header-card">
+
+
+                    <div class="person-main-info">
+
+
+                        <div class="large-avatar">
+
+                            {{ person.name|first|upper }}
+
+                        </div>
+
+
+                        <div>
+
+                            <h1>
+                                {{ person.name }}
+                            </h1>
+
+
+                            <div class="person-meta">
+
+                                <span>
+                                    {{ person.person_id }}
+                                </span>
+
+                                <span>•</span>
+
+                                <span>
+                                    {{ person.get_person_type_display }}
+                                </span>
+
+                                {% if person.department %}
+
+                                <span>•</span>
+
+                                <span>
+                                    {{ person.department }}
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if person.email %}
+
+                            <p class="person-email">
+
+                                <i class="bi bi-envelope"></i>
+
+                                {{ person.email }}
+
+                            </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <button class="secondary-button">
+
+                        <i class="bi bi-pencil"></i>
+
+                        Edit Person
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- SUMMARY -->
+
+                <div class="profile-summary">
+
+
+                    <!-- COMPLETION -->
+
+                    <div class="profile-card completion-card">
+
+                        <div class="card-title">
+
+                            <div>
+
+                                <h3>Document Completion</h3>
+
+                                <p>
+                                    Required documents
+                                </p>
+
+                            </div>
+
+                            <i class="bi bi-file-earmark-check"></i>
+
+                        </div>
+
+
+                        <div class="completion-number">
+
+                            <strong>
+                                {{ submitted_count }}/{{ total_documents }}
+                            </strong>
+
+                            <span>
+                                {{ completion_percentage }}%
+                            </span>
+
+                        </div>
+
+
+                        <div class="profile-progress">
+
+                            <div class="profile-progress-bar" data-percentage=" {{completion_percentage} }"></div>
+
+                        </div>
+
+
+                        <div class="completion-info">
+
+                            <span class="submitted-text">
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                {{ submitted_count }} Submitted
+                            </span>
+
+
+                            <span class="missing-text">
+                                <i class="bi bi-x-circle-fill"></i>
+
+                                {{ missing_count }} Missing
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PERSONAL INFORMATION -->
+
+                    <div class="profile-card">
+
+                        <div class="card-title">
+
+                            <div>
+
+                                <h3>Personal Information</h3>
+
+                                <p>
+                                    Basic details
+                                </p>
+
+                            </div>
+
+                            <i class="bi bi-person"></i>
+
+                        </div>
+
+
+                        <div class="info-grid">
+
+
+                            <div class="info-item">
+
+                                <span>Email</span>
+
+                                <strong>
+                                    {{ person.email|default:"Not provided" }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info-item">
+
+                                <span>Phone</span>
+
+                                <strong>
+                                    {{ person.phone|default:"Not provided" }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info-item">
+
+                                <span>Department</span>
+
+                                <strong>
+                                    {{ person.department|default:"Not provided" }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info-item">
+
+                                <span>Type</span>
+
+                                <strong>
+                                    {{ person.get_person_type_display }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- DOCUMENTS -->
+
+                <div class="profile-card documents-card">
+
+
+                    <div class="documents-header">
+
+                        <div>
+
+                            <h3>Documents</h3>
+
+                            <p>
+                                Required documents for this person
+                            </p>
+
+                        </div>
+
+
+                        <a href="{% url 'upload_document' person.id %}" class="primary-button">
+
+                            <i class="bi bi-cloud-arrow-up"></i>
+
+                            Upload Document
+
+                        </a>
+
+                    </div>
+
+
+
+                    <div class="document-list">
+
+
+                        {% for doc_type in required_documents %}
+
+                        <div class="document-row">
+
+
+                            <div class="document-info">
+
+
+                                <div class="document-icon">
+
+                                    {% if doc_type.name|lower == "aadhaar card" %}
+
+                                    <i class="bi bi-person-vcard"></i>
+
+                                    {% elif doc_type.name|lower == "pan card" %}
+
+                                    <i class="bi bi-credit-card"></i>
+
+                                    {% else %}
+
+                                    <i class="bi bi-file-earmark-text"></i>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div>
+
+                                    <strong>
+                                        {{ doc_type.name }}
+                                    </strong>
+
+
+                                    {% if doc_type.description %}
+
+                                    <small>
+                                        {{ doc_type.description }}
+                                    </small>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+
+                            {% if doc_type.id in submitted_type_ids %}
+
+                            <div class="document-status">
+
+                                <span class="document-badge submitted">
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                    Submitted
+
+                                </span>
+
+
+                                {% for document in submitted_documents %}
+
+                                {% if document.document_type_id == doc_type.id %}
+
+                                <a href="{{ document.file.url }}" target="_blank" class="view-document">
+
+                                    View
+
+                                    <i class="bi bi-box-arrow-up-right"></i>
+
+                                </a>
+
+                                {% endif %}
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            {% else %}
+
+                            <div class="document-status">
+
+                                <span class="document-badge missing">
+
+                                    <i class="bi bi-exclamation-circle-fill"></i>
+
+                                    Missing
+
+                                </span>
+
+
+                                <a href="{% url 'upload_document' person.id %}?document_type={{ doc_type.id }}"
+                                    class="upload-small">
+
+                                    <i class="bi bi-upload"></i>
+
+                                    Upload
+
+                                </a>
+
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% empty %}
+
+                        <div class="empty-documents">
+
+                            <i class="bi bi-folder-x"></i>
+
+                            <h4>No document types found</h4>
+
+                            <p>
+                                Add document types from the admin panel.
+                            </p>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+        </main>
+
+    </div>
+    <script>
+        const progressBar = document.querySelector(".profile-progress-bar");
+
+        if (progressBar) {
+            progressBar.style.width =
+                progressBar.dataset.percentage + "%";
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocManager | Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="logo"><i class="bi bi-file-earmark-text"></i><span>DocManager</span></div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'dashboard' %}" class="menu-item active"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+            <a href="{% url 'people' %}" class="menu-item"><i class="bi bi-people-fill"></i><span>Person</span></a>
+            <a href="{% url 'all_documents' %}" class="menu-item"><i class="bi bi-folder-fill"></i><span>Documents</span></a>
+            <a href="{% url 'document_types' %}" class="menu-item"><i class="bi bi-files"></i><span>Document Types</span></a>
+            <a href="{% url 'recent_documents' %}" class="menu-item"><i class="bi bi-clock-history"></i><span>Recent</span></a>
+            <a href="{% url 'trash' %}" class="menu-item"><i class="bi bi-trash3-fill"></i><span>Trash</span></a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="{% url 'settings' %}" class="menu-item"><i class="bi bi-gear-fill"></i><span>Settings</span></a>
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="menu-item logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></button>
+            </form>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Search people, documents...">
+            </div>
+            <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-content">
+            <div class="page-heading">
+                <div>
+                    <h1>Welcome back, {{ request.user.username }}!</h1>
+                    <p>Here's an overview of your document management system.</p>
+                </div>
+                <a href="{% url 'upload_document_general' %}" class="primary-button">
+                    <i class="bi bi-cloud-upload"></i> Upload Document
+                </a>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="bi bi-people-fill"></i></div>
+                    <div><p>Total People</p><h2>{{ total_people }}</h2><span class="stat-description">{{ total_students }} Students · {{ total_employees }} Employees</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="bi bi-file-earmark-text-fill"></i></div>
+                    <div><p>Total Files</p><h2>{{ total_files }}</h2><span class="stat-description">Active documents</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="bi bi-check-circle-fill"></i></div>
+                    <div><p>Submitted</p><h2>{{ submitted_files }}</h2><span class="stat-description">{{ completion_percentage }}% required completion</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="bi bi-file-earmark-x-fill"></i></div>
+                    <div><p>Missing Documents</p><h2>{{ missing_documents }}</h2><span class="warning">Required documents pending</span></div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header"><div><h3>Document Completion</h3><p>Overall required-document submission status</p></div></div>
+                    <div class="completion-section">
+                        <div class="donut-chart" style="background: conic-gradient(#16a36a 0% {{ completion_percentage }}%, #ef4444 {{ completion_percentage }}% 100%);">
+                            <div class="donut-center"><strong>{{ completion_percentage }}%</strong><span>Completed</span></div>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item"><span class="legend-dot submitted"></span><span>Submitted</span><strong>{{ submitted_files }}</strong></div>
+                            <div class="legend-item"><span class="legend-dot missing"></span><span>Missing</span><strong>{{ missing_documents }}</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header"><div><h3>Files by Type</h3><p>Distribution of active stored files</p></div></div>
+                    <div class="file-types">
+                        {% for item in file_type_counts %}
+                        <div class="file-type-row"><span><i class="bi {{ item.icon }}"></i>{{ item.label }}</span><strong>{{ item.count }}</strong></div>
+                        <div class="progress"><div class="progress-bar" style="width: {{ item.percentage }}%;"></div></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid bottom-grid">
+                <div class="dashboard-card recent-card">
+                    <div class="card-header">
+                        <div><h3>Recent Uploads</h3><p>Latest documents added to the system</p></div>
+                        <a href="{% url 'all_documents' %}">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Person</th><th>Document</th><th>Type</th><th>Uploaded</th><th>Status</th></tr></thead>
+                            <tbody>
+                            {% for document in recent_uploads %}
+                                <tr>
+                                    <td>{{ document.person.name }}</td>
+                                    <td>{{ document.file_name }}</td>
+                                    <td>{{ document.document_type.name }}</td>
+                                    <td>{{ document.uploaded_at|date:"d M Y" }}</td>
+                                    <td><span class="status submitted-status">{{ document.get_status_display }}</span></td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;">No documents uploaded yet.</td></tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header"><div><h3>Quick Actions</h3><p>Common operations</p></div></div>
+                    <div class="quick-actions">
+                        <a href="{% url 'add_person' %}" class="quick-action blue-action"><i class="bi bi-person-plus-fill"></i><div><strong>Add Person</strong><small>Add student or employee</small></div><i class="bi bi-chevron-right"></i></a>
+                        <a href="{% url 'upload_document_general' %}" class="quick-action green-action"><i class="bi bi-cloud-arrow-up-fill"></i><div><strong>Upload Document</strong><small>Upload a new file</small></div><i class="bi bi-chevron-right"></i></a>
+                        <a href="{% url 'add_document_type' %}" class="quick-action purple-action"><i class="bi bi-file-earmark-plus-fill"></i><div><strong>Add Document Type</strong><small>Create a new requirement</small></div><i class="bi bi-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

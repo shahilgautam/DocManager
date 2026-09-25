@@ -1,0 +1,1275 @@
+/* =========================================================
+   DOCUMENTS PAGE
+   Global layout/theme comes from dashboard.css
+   ========================================================= */
+
+
+/* =========================================================
+   DOCUMENT CONTENT
+   ========================================================= */
+
+.documents-content {
+    padding: 30px 32px 40px;
+}
+
+
+/* =========================================================
+   PAGE HEADING
+   ========================================================= */
+
+.documents-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.documents-heading h1 {
+    font-size: 25px;
+    font-weight: 700;
+    color: #172033;
+    margin-bottom: 6px;
+}
+
+.documents-heading p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   PRIMARY DOCUMENT BUTTON
+   ========================================================= */
+
+.document-primary-button {
+    border: none;
+    background: #1769e0;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.document-primary-button:hover {
+    background: #1257bd;
+    color: white;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   DOCUMENT SEARCH TOOLBAR
+   ========================================================= */
+
+.document-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 16px;
+}
+
+
+/* =========================================================
+   DOCUMENT SEARCH
+   ========================================================= */
+
+.document-search {
+    flex: 1;
+    max-width: 760px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+.document-search>i {
+    margin-left: 17px;
+    color: #64748b;
+    font-size: 17px;
+}
+
+.document-search input {
+    flex: 1;
+
+    height: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    padding: 0 14px;
+
+    font-size: 13px;
+    color: #334155;
+}
+
+.document-search input::placeholder {
+    color: #94a3b8;
+}
+
+.document-search button {
+    height: 100%;
+
+    border: none;
+
+    background: #1769e0;
+    color: white;
+
+    padding: 0 23px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.document-search button:hover {
+    background: #1257bd;
+}
+
+
+/* =========================================================
+   GRID / LIST VIEW BUTTONS
+   ========================================================= */
+
+.document-view-buttons {
+    display: flex;
+
+    border: 1px solid #dbe3ed;
+
+    border-radius: 7px;
+
+    overflow: hidden;
+
+    background: white;
+}
+
+.document-view-button {
+    width: 42px;
+    height: 38px;
+
+    border: none;
+
+    background: white;
+
+    color: #94a3b8;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.document-view-button:hover {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+.document-view-button.active {
+    background: #e8f1ff;
+    color: #1769e0;
+}
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+.document-filters {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 30px;
+}
+
+.document-filter {
+    height: 40px;
+
+    padding: 0 13px;
+
+    border: 1px solid #dbe3ed;
+
+    border-radius: 7px;
+
+    background: white;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+.document-filter:hover {
+    border-color: #cbd5e1;
+}
+
+.document-filter:focus {
+    border-color: #1769e0;
+}
+
+
+.clear-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-left: 4px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    text-decoration: none;
+}
+
+.clear-filter:hover {
+    color: #ef4444;
+}
+
+
+/* =========================================================
+   DOCUMENT SECTION
+   ========================================================= */
+
+.document-section {
+    margin-bottom: 32px;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.document-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 16px;
+}
+
+.document-section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+
+    color: #172033;
+
+    margin-bottom: 4px;
+}
+
+.document-section-header p {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.document-section-header a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    color: #1769e0;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.document-section-header a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   FOLDER GRID
+   ========================================================= */
+
+.folder-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   FOLDER CARD
+   ========================================================= */
+
+.folder-card {
+    min-height: 105px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    position: relative;
+
+    padding: 20px;
+
+    background: white;
+
+    border: 1px solid #e8edf3;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
+
+.folder-card:hover {
+    border-color: #cbd5e1;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   FOLDER ICON
+   ========================================================= */
+
+.folder-icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #fff5d8;
+
+    color: #eab308;
+
+    font-size: 23px;
+}
+
+
+/* =========================================================
+   FOLDER INFORMATION
+   ========================================================= */
+
+.folder-info {
+    min-width: 0;
+}
+
+.folder-info h3 {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #172033;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    padding-right: 20px;
+}
+
+.folder-info span {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   FOLDER MENU
+   ========================================================= */
+
+.folder-menu {
+    position: absolute;
+
+    top: 17px;
+    right: 14px;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   EMPTY FOLDER
+   ========================================================= */
+
+.empty-folder {
+    grid-column: 1 / -1;
+
+    min-height: 120px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px dashed #dbe3ed;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #94a3b8;
+}
+
+.empty-folder i {
+    font-size: 28px;
+
+    margin-bottom: 8px;
+}
+
+.empty-folder p {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   DOCUMENT GRID
+   ========================================================= */
+
+.document-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   DOCUMENT CARD
+   ========================================================= */
+
+.document-card {
+    min-width: 0;
+
+    background: white;
+
+    border: 1px solid #e8edf3;
+
+    border-radius: 10px;
+
+    padding: 18px;
+
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);
+
+    transition: all 0.2s ease;
+}
+
+.document-card:hover {
+    border-color: #cbd5e1;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   DOCUMENT CARD TOP
+   ========================================================= */
+
+.document-card-top {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   FILE ICON
+   ========================================================= */
+
+.file-icon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #e8f1ff;
+
+    color: #1769e0;
+
+    font-size: 21px;
+}
+
+
+/* PDF */
+
+.file-icon.pdf {
+    background: #ffeded;
+    color: #ef4444;
+}
+
+
+/* IMAGE */
+
+.file-icon.image {
+    background: #e6f8f0;
+    color: #16a36a;
+}
+
+
+/* EXCEL */
+
+.file-icon.excel {
+    background: #e6f8f0;
+    color: #16a36a;
+}
+
+
+/* WORD */
+
+.file-icon.word {
+    background: #e8f1ff;
+    color: #1769e0;
+}
+
+
+/* =========================================================
+   MORE BUTTON
+   ========================================================= */
+
+.document-more {
+    width: 30px;
+    height: 30px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #94a3b8;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+}
+
+.document-more:hover {
+    background: #f1f5f9;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   DOCUMENT INFORMATION
+   ========================================================= */
+
+.document-info {
+    margin-top: 17px;
+
+    min-width: 0;
+}
+
+.document-info h3 {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #172033;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.document-type {
+    display: inline-block;
+
+    margin-top: 7px;
+
+    padding: 4px 8px;
+
+    background: #f1f5f9;
+
+    color: #64748b;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   PERSON INFORMATION
+   ========================================================= */
+
+.document-person {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    margin-top: 17px;
+
+    padding-top: 13px;
+
+    border-top: 1px solid #f1f5f9;
+}
+
+.person-avatar {
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e8f1ff;
+
+    color: #1769e0;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.document-person div:last-child {
+    min-width: 0;
+}
+
+.document-person strong {
+    display: block;
+
+    font-size: 11px;
+
+    color: #334155;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.document-person small {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   DOCUMENT FOOTER
+   ========================================================= */
+
+.document-footer {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 15px;
+}
+
+.document-status {
+    font-size: 10px;
+
+    font-weight: 600;
+
+    color: #64748b;
+}
+
+.document-status i {
+    margin-right: 3px;
+}
+
+.document-status.submitted {
+    color: #168653;
+}
+
+.document-status.rejected {
+    color: #ef4444;
+}
+
+.document-open {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+
+    color: #1769e0;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.document-open:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   EMPTY DOCUMENTS
+   ========================================================= */
+
+.empty-documents {
+    grid-column: 1 / -1;
+
+    min-height: 250px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+
+    border: 1px dashed #dbe3ed;
+
+    border-radius: 10px;
+
+    text-align: center;
+}
+
+.empty-icon {
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    color: #94a3b8;
+
+    font-size: 27px;
+
+    margin-bottom: 14px;
+}
+
+.empty-documents h3 {
+    font-size: 15px;
+
+    color: #334155;
+
+    margin-bottom: 6px;
+}
+
+.empty-documents p {
+    color: #94a3b8;
+
+    font-size: 12px;
+
+    margin-bottom: 15px;
+}
+
+.empty-button {
+    padding: 8px 14px;
+
+    background: #e8f1ff;
+
+    color: #1769e0;
+
+    border-radius: 6px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   LIST VIEW
+   ========================================================= */
+
+.document-list {
+    display: none;
+
+    background: white;
+
+    border: 1px solid #e8edf3;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   LIST HEADER + ROW
+   ========================================================= */
+
+.list-header,
+.list-row {
+    display: grid;
+
+    grid-template-columns:
+        2fr 1.4fr 1.2fr 1fr 1fr 45px;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 13px 17px;
+}
+
+.list-header {
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.3px;
+}
+
+.list-row {
+    border-top: 1px solid #f1f5f9;
+
+    font-size: 11px;
+
+    color: #475569;
+}
+
+.list-row:hover {
+    background: #fafcff;
+}
+
+
+/* =========================================================
+   LIST DOCUMENT NAME
+   ========================================================= */
+
+.list-document-name {
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.list-document-name>div:last-child {
+    min-width: 0;
+}
+
+.list-document-name strong {
+    display: block;
+
+    font-size: 11px;
+
+    color: #334155;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.list-document-name small {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 9px;
+
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   LIST FILE ICON
+   ========================================================= */
+
+.list-file-icon {
+    width: 35px;
+    height: 35px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #e8f1ff;
+
+    color: #1769e0;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   LIST PERSON
+   ========================================================= */
+
+.list-person {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: 0;
+}
+
+.list-person span {
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.small-avatar {
+    width: 28px;
+    height: 28px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e8f1ff;
+
+    color: #1769e0;
+
+    font-size: 9px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   LIST TYPE
+   ========================================================= */
+
+.list-type {
+    color: #64748b;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   LIST STATUS
+   ========================================================= */
+
+.list-status {
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    border-radius: 15px;
+
+    background: #f1f5f9;
+
+    color: #64748b;
+
+    font-size: 9px;
+
+    font-weight: 600;
+}
+
+.list-status.submitted {
+    background: #e7f8ef;
+
+    color: #168653;
+}
+
+.list-status.rejected {
+    background: #ffeded;
+
+    color: #ef4444;
+}
+
+
+/* =========================================================
+   LIST DATE
+   ========================================================= */
+
+.list-date {
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   LIST OPEN
+   ========================================================= */
+
+.list-open {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    color: #64748b;
+
+    text-decoration: none;
+}
+
+.list-open:hover {
+    background: #e8f1ff;
+
+    color: #1769e0;
+}
+
+
+/* =========================================================
+   LIST EMPTY
+   ========================================================= */
+
+.list-empty {
+    padding: 40px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   RESPONSIVE - LARGE TABLET
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .folder-grid,
+    .document-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .folder-grid,
+    .document-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .document-toolbar {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .document-search {
+        max-width: none;
+    }
+
+    .document-view-buttons {
+        align-self: flex-end;
+    }
+
+    .document-filters {
+        flex-wrap: wrap;
+    }
+
+    .list-header,
+    .list-row {
+        min-width: 800px;
+    }
+
+    .document-list {
+        overflow-x: auto;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .documents-content {
+        padding: 20px 15px 30px;
+    }
+
+
+    .documents-heading {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+
+    .documents-heading h1 {
+        font-size: 21px;
+    }
+
+
+    .document-primary-button {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+
+    .document-toolbar {
+        gap: 12px;
+    }
+
+
+    .document-search {
+        height: 46px;
+    }
+
+
+    .document-search button {
+        padding: 0 15px;
+    }
+
+
+    .document-filters {
+        gap: 8px;
+    }
+
+
+    .document-filter {
+        flex: 1;
+
+        min-width: 140px;
+    }
+
+
+    .folder-grid,
+    .document-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .document-section-header {
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+
+    .document-section-header h2 {
+        font-size: 16px;
+    }
+
+
+    .document-card {
+        padding: 16px;
+    }
+
+}
+
+.document-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.document-delete {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #fef2f2;
+    color: #dc2626;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.document-delete:hover {
+    background: #dc2626;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.document-delete i {
+    font-size: 15px;
+}

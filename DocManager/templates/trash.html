@@ -1,0 +1,652 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Trash | DocManager</title>
+
+
+    <!-- Dashboard CSS -->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/dashboard.css' %}"
+    >
+
+
+    <!-- Trash CSS -->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/trash.css' %}"
+    >
+
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="app-container">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <i class="bi bi-file-earmark-text"></i>
+
+            <span>DocManager</span>
+
+        </div>
+
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-menu">
+
+
+            <!-- Dashboard -->
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="menu-item"
+            >
+
+                <i class="bi bi-grid-1x2-fill"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+
+            <!-- People -->
+
+            <a
+                href="{% url 'people' %}"
+                class="menu-item"
+            >
+
+                <i class="bi bi-people-fill"></i>
+
+                <span>People</span>
+
+            </a>
+
+
+
+            <!-- Documents -->
+
+            <a
+                href="{% url 'all_documents' %}"
+                class="menu-item"
+            >
+
+                <i class="bi bi-folder-fill"></i>
+
+                <span>Documents</span>
+
+            </a>
+
+
+
+            <!-- Document Types -->
+
+            <a
+                href="{% url 'document_types' %}"
+                class="menu-item"
+            >
+
+                <i class="bi bi-files"></i>
+
+                <span>Document Types</span>
+
+            </a>
+
+
+
+            <!-- Recent -->
+
+            <a
+                href="{% url 'recent_documents' %}"
+                class="menu-item"
+            >
+
+                <i class="bi bi-clock-history"></i>
+
+                <span>Recent</span>
+
+            </a>
+
+
+
+            <!-- Trash -->
+
+            <a
+                href="{% url 'trash' %}"
+                class="menu-item active"
+            >
+
+                <i class="bi bi-trash3-fill"></i>
+
+                <span>Trash</span>
+
+            </a>
+
+
+        </nav>
+
+
+
+        <!-- =================================================
+             SIDEBAR BOTTOM
+        ================================================== -->
+
+        <div class="sidebar-bottom">
+
+
+            <!-- Settings -->
+
+            <a href="{% url 'settings' %}" class="menu-item">
+
+                <i class="bi bi-gear-fill"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+
+
+            <!-- Logout -->
+
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+
+            <!-- SEARCH -->
+
+            <div class="topbar-left">
+
+                <div class="search-box">
+
+                    <i class="bi bi-search"></i>
+
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TOPBAR RIGHT -->
+
+            <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =================================================
+             TRASH PAGE
+        ================================================== -->
+
+        <section class="content-area trash-page">
+
+
+            <!-- =================================================
+                 PAGE HEADER
+            ================================================== -->
+
+            <div class="trash-header">
+
+
+                <div class="trash-title">
+
+
+                    <div class="trash-title-icon">
+
+                        <i class="bi bi-trash3"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h1>
+
+                            Trash
+
+                        </h1>
+
+
+                        <p>
+
+                            Deleted documents are kept here until permanently removed.
+
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                {% if documents %}
+
+
+                <div class="trash-count">
+
+                    <i class="bi bi-files"></i>
+
+                    {{ documents|length }}
+
+                    document{{ documents|length|pluralize }}
+
+                </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 INFORMATION BAR
+            ================================================== -->
+
+            {% if documents %}
+
+
+            <div class="trash-info">
+
+
+                <div class="trash-info-icon">
+
+                    <i class="bi bi-info-circle"></i>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+
+                        Documents in Trash
+
+                    </strong>
+
+
+                    <p>
+
+                        You can restore a document or permanently delete it.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 DOCUMENT LIST
+            ================================================== -->
+
+            {% if documents %}
+
+
+            <div class="trash-list">
+
+
+                {% for document in documents %}
+
+
+                <div class="trash-card">
+
+
+                    <!-- =================================================
+                         FILE ICON
+                    ================================================== -->
+
+                    <div class="trash-file-icon">
+
+
+                        {% if ".pdf" in document.file.name|lower %}
+
+                            <i class="bi bi-file-earmark-pdf"></i>
+
+
+                        {% elif ".doc" in document.file.name|lower %}
+
+                            <i class="bi bi-file-earmark-word"></i>
+
+
+                        {% elif ".xls" in document.file.name|lower %}
+
+                            <i class="bi bi-file-earmark-excel"></i>
+
+
+                        {% elif ".jpg" in document.file.name|lower %}
+
+                            <i class="bi bi-file-earmark-image"></i>
+
+
+                        {% elif ".jpeg" in document.file.name|lower %}
+
+                            <i class="bi bi-file-earmark-image"></i>
+
+
+                        {% elif ".png" in document.file.name|lower %}
+
+                            <i class="bi bi-file-earmark-image"></i>
+
+
+                        {% elif ".txt" in document.file.name|lower %}
+
+                            <i class="bi bi-file-earmark-text"></i>
+
+
+                        {% else %}
+
+                            <i class="bi bi-file-earmark"></i>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         DOCUMENT DETAILS
+                    ================================================== -->
+
+                    <div class="trash-document-info">
+
+
+                        <!-- FILE NAME -->
+
+                        <h3
+                            title="{{ document.file_name }}"
+                        >
+
+                            {{ document.file_name }}
+
+                        </h3>
+
+
+
+                        <!-- DOCUMENT DETAILS -->
+
+                        <div class="trash-details">
+
+
+                            <!-- DOCUMENT TYPE -->
+
+                            <span>
+
+                                <i class="bi bi-folder"></i>
+
+                                {{ document.document_type.name }}
+
+                            </span>
+
+
+
+                            <!-- PERSON -->
+
+                            <span>
+
+                                <i class="bi bi-person"></i>
+
+                                {{ document.person.name }}
+
+                            </span>
+
+
+
+                            <!-- UPLOAD DATE -->
+
+                            <span>
+
+                                <i class="bi bi-calendar3"></i>
+
+                                Uploaded
+
+                                {{ document.uploaded_at|date:"d M Y" }}
+
+                            </span>
+
+
+                        </div>
+
+
+
+                        <!-- DELETED TIME -->
+
+                        {% if document.deleted_at %}
+
+
+                        <div class="deleted-time">
+
+                            <i class="bi bi-clock-history"></i>
+
+                            Deleted
+
+                            {{ document.deleted_at|date:"d M Y, h:i A" }}
+
+                        </div>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         ACTIONS
+                    ================================================== -->
+
+                    <div class="trash-actions">
+
+
+                        <!-- RESTORE -->
+
+                        <form
+                            method="POST"
+                            action="{% url 'restore_document' document.id %}"
+                        >
+
+                            {% csrf_token %}
+
+
+                            <button
+                                type="submit"
+                                class="restore-btn"
+                                title="Restore Document"
+                            >
+
+                                <i class="bi bi-arrow-counterclockwise"></i>
+
+                                Restore
+
+                            </button>
+
+
+                        </form>
+
+
+
+                        <!-- PERMANENT DELETE -->
+
+                        <form
+                            method="POST"
+                            action="{% url 'permanent_delete_document' document.id %}"
+                            onsubmit="return confirm('Permanently delete this document? This action cannot be undone.');"
+                        >
+
+                            {% csrf_token %}
+
+
+                            <button
+                                type="submit"
+                                class="permanent-delete-btn"
+                                title="Delete Permanently"
+                            >
+
+                                <i class="bi bi-trash3"></i>
+
+                                Delete Permanently
+
+                            </button>
+
+
+                        </form>
+
+
+                    </div>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 EMPTY TRASH
+            ================================================== -->
+
+            {% else %}
+
+
+            <div class="trash-empty">
+
+
+                <div class="trash-empty-icon">
+
+                    <i class="bi bi-trash3"></i>
+
+                </div>
+
+
+                <h2>
+
+                    Trash is Empty
+
+                </h2>
+
+
+                <p>
+
+                    Documents that you delete will appear here.
+
+                </p>
+
+
+                <a
+                    href="{% url 'all_documents' %}"
+                    class="browse-documents-btn"
+                >
+
+                    <i class="bi bi-file-earmark-text"></i>
+
+                    Browse Documents
+
+                </a>
+
+
+            </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>

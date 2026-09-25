@@ -1,0 +1,603 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document Types | DocManager</title>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/document_types.css' %}">
+
+</head>
+
+
+<body>
+
+    <div class="app-container">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+
+                <i class="bi bi-file-earmark-text"></i>
+
+                <span>DocManager</span>
+
+            </div>
+
+
+            <nav class="sidebar-menu">
+
+
+                <a href="{% url 'dashboard' %}" class="menu-item">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{% url 'people' %}" class="menu-item">
+                    <i class="bi bi-people-fill"></i>
+                    <span>People</span>
+                </a>
+
+                <a href="{% url 'all_documents' %}" class="menu-item">
+                    <i class="bi bi-folder-fill"></i>
+                    <span>Documents</span>
+                </a>
+
+                <a href="{% url 'document_types' %}" class="menu-item active">
+                    <i class="bi bi-files"></i>
+                    <span>Document Types</span>
+                </a>
+
+                <a href="{% url 'recent_documents' %}" class="menu-item">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Recent</span>
+                </a>
+
+                <a href="{% url 'trash' %}" class="menu-item">
+                    <i class="bi bi-trash3-fill"></i>
+                    <span>Trash</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <a href="{% url 'settings' %}" class="menu-item">
+
+                    <i class="bi bi-gear-fill"></i>
+
+                    <span>Settings</span>
+
+                </a>
+
+
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- MAIN -->
+
+        <main class="main-content">
+
+
+            <!-- TOPBAR -->
+
+            <header class="topbar">
+
+
+                <div class="search-box">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text" placeholder="Search people, documents...">
+
+                </div>
+
+
+                <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+
+            </header>
+
+
+
+            <!-- CONTENT -->
+
+            <section class="document-types-content">
+
+
+                <!-- PAGE HEADER -->
+
+                <div class="document-types-header">
+
+
+                    <div>
+
+                        <h1>
+                            Document Types
+                        </h1>
+
+                        <p>
+                            Manage the types of documents your system accepts.
+                        </p>
+
+                    </div>
+
+
+                    <a href="{% url 'add_document_type' %}" class="primary-button">
+
+                        <i class="bi bi-plus-lg"></i>
+
+                        Add Document Type
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- SUMMARY -->
+
+                <div class="type-summary">
+
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon blue">
+
+                            <i class="bi bi-files"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Total Types
+                            </span>
+
+                            <strong>
+                                {{ document_types|length }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon green">
+
+                            <i class="bi bi-check-circle"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Active
+                            </span>
+
+                            <strong>
+                                {{ active_count }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon purple">
+
+                            <i class="bi bi-person"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Student Types
+                            </span>
+
+                            <strong>
+                                {{ student_count }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon orange">
+
+                            <i class="bi bi-briefcase"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Employee Types
+                            </span>
+
+                            <strong>
+                                {{ employee_count }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TYPES CARD -->
+
+                <div class="types-card">
+
+
+                    <div class="types-card-header">
+
+                        <div>
+
+                            <h3>
+                                All Document Types
+                            </h3>
+
+                            <p>
+                                Configure document requirements.
+                            </p>
+
+                        </div>
+
+
+                        <div class="type-search">
+
+                            <i class="bi bi-search"></i>
+
+                            <input type="text" id="typeSearch" placeholder="Search document types...">
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="types-table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        DOCUMENT TYPE
+                                    </th>
+
+                                    <th>
+                                        REQUIRED FOR
+                                    </th>
+
+                                    <th>
+                                        FILE TYPES
+                                    </th>
+
+                                    <th>
+                                        DOCUMENTS
+                                    </th>
+
+                                    <th>
+                                        STATUS
+                                    </th>
+
+                                    <th>
+                                        ACTION
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="typesTableBody">
+
+
+                                {% for type in document_types %}
+
+                                <tr class="type-row">
+
+
+                                    <!-- NAME -->
+
+                                    <td>
+
+                                        <div class="type-name-cell">
+
+                                            <div class="type-icon">
+
+                                                <i class="bi bi-file-earmark-text"></i>
+
+                                            </div>
+
+
+                                            <div>
+
+                                                <strong>
+                                                    {{ type.name }}
+                                                </strong>
+
+
+                                                {% if type.description %}
+
+                                                <small>
+                                                    {{ type.description }}
+                                                </small>
+
+                                                {% endif %}
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <!-- REQUIRED FOR -->
+
+                                    <td>
+
+                                        {% if type.required_for == "student" %}
+
+                                        <span class="requirement student">
+                                            Student
+                                        </span>
+
+                                        {% elif type.required_for == "employee" %}
+
+                                        <span class="requirement employee">
+                                            Employee
+                                        </span>
+
+                                        {% else %}
+
+                                        <span class="requirement both">
+                                            Student & Employee
+                                        </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+
+                                    <!-- FILE TYPES -->
+
+                                    <td>
+
+                                        <span class="file-types">
+
+                                            {{ type.allowed_file_types|default:"All supported" }}
+
+                                        </span>
+
+                                    </td>
+
+
+
+                                    <!-- DOCUMENT COUNT -->
+
+                                    <td>
+
+                                        <span class="document-count">
+
+                                            {{ type.documents.count }}
+
+                                        </span>
+
+                                    </td>
+
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        {% if type.is_active %}
+
+                                        <span class="active-status">
+
+                                            <i class="bi bi-check-circle-fill"></i>
+
+                                            Active
+
+                                        </span>
+
+                                        {% else %}
+
+                                        <span class="inactive-status">
+
+                                            <i class="bi bi-dash-circle-fill"></i>
+
+                                            Inactive
+
+                                        </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+
+                                    <!-- ACTION -->
+
+                                    <td>
+
+                                        <div class="type-actions">
+
+                                            <a href="{% url 'edit_document_type' type.id %}" title="Edit">
+
+                                                <i class="bi bi-pencil"></i>
+
+                                            </a>
+
+
+                                            <a href="{% url 'toggle_document_type' type.id %}"
+                                                title="{% if type.is_active %}Deactivate{% else %}Activate{% endif %}">
+
+                                                {% if type.is_active %}
+
+                                                <i class="bi bi-toggle-on"></i>
+
+                                                {% else %}
+
+                                                <i class="bi bi-toggle-off"></i>
+
+                                                {% endif %}
+
+                                            </a>
+
+
+                                            <a href="{% url 'delete_document_type' type.id %}" title="Delete"
+                                                class="delete-action">
+
+                                                <i class="bi bi-trash3"></i>
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+
+                                </tr>
+
+
+                                {% empty %}
+
+                                <tr>
+
+                                    <td colspan="6" class="empty-types">
+
+                                        <i class="bi bi-folder-x"></i>
+
+                                        <h4>
+                                            No document types
+                                        </h4>
+
+                                        <p>
+                                            Add your first document type to get started.
+                                        </p>
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script>
+
+        const searchInput =
+            document.getElementById("typeSearch");
+
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                const search =
+                    this.value.toLowerCase();
+
+
+                const rows =
+                    document.querySelectorAll(".type-row");
+
+
+                rows.forEach(function (row) {
+
+                    const text =
+                        row.textContent.toLowerCase();
+
+
+                    if (text.includes(search)) {
+
+                        row.style.display = "";
+
+                    } else {
+
+                        row.style.display = "none";
+
+                    }
+
+                });
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile | DocManager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+</head>
+<body>
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="logo"><i class="bi bi-file-earmark-text"></i><span>DocManager</span></div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'dashboard' %}" class="menu-item"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+            <a href="{% url 'people' %}" class="menu-item"><i class="bi bi-people-fill"></i><span>People</span></a>
+            <a href="{% url 'all_documents' %}" class="menu-item"><i class="bi bi-folder-fill"></i><span>Documents</span></a>
+            <a href="{% url 'document_types' %}" class="menu-item"><i class="bi bi-files"></i><span>Document Types</span></a>
+            <a href="{% url 'recent_documents' %}" class="menu-item"><i class="bi bi-clock-history"></i><span>Recent</span></a>
+            <a href="{% url 'trash' %}" class="menu-item"><i class="bi bi-trash3-fill"></i><span>Trash</span></a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="{% url 'settings' %}" class="menu-item active"><i class="bi bi-gear-fill"></i><span>Settings</span></a>
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="menu-item logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></button>
+            </form>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="search-box"><i class="bi bi-search"></i><input type="text" placeholder="Search people, documents..."></div>
+            <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+        </header>
+
+        <section class="settings-content form-page">
+            <div class="settings-header">
+                <h1>Edit Profile</h1>
+                <p>Update the information of the currently logged-in administrator.</p>
+            </div>
+
+            <div class="form-card">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+                    <div class="form-grid">
+                        <div class="form-group"><label for="{{ form.username.id_for_label }}">Username</label>{{ form.username }}{% for e in form.username.errors %}<div class="form-errors">{{ e }}</div>{% endfor %}<span class="form-help">Used to sign in to DocManager.</span></div>
+                        <div class="form-group"><label for="{{ form.email.id_for_label }}">Email Address</label>{{ form.email }}{% for e in form.email.errors %}<div class="form-errors">{{ e }}</div>{% endfor %}</div>
+                        <div class="form-group"><label for="{{ form.first_name.id_for_label }}">First Name</label>{{ form.first_name }}{% for e in form.first_name.errors %}<div class="form-errors">{{ e }}</div>{% endfor %}</div>
+                        <div class="form-group"><label for="{{ form.last_name.id_for_label }}">Last Name</label>{{ form.last_name }}{% for e in form.last_name.errors %}<div class="form-errors">{{ e }}</div>{% endfor %}</div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="settings-button"><i class="bi bi-check-lg"></i> Save Changes</button>
+                        <a href="{% url 'settings' %}" class="settings-button secondary settings-link">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

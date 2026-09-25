@@ -1,0 +1,375 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Delete Document Type | DocManager</title>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/add_document_type.css' %}">
+
+
+    <style>
+        .delete-card {
+
+            max-width: 560px;
+
+            background: white;
+
+            border: 1px solid #e8edf3;
+
+            border-radius: 10px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 2px 5px rgba(15, 23, 42, 0.03);
+
+        }
+
+
+        .delete-icon {
+
+            width: 55px;
+
+            height: 55px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #fff0f0;
+
+            color: #dc3b3b;
+
+            font-size: 24px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .delete-card h2 {
+
+            color: #172033;
+
+            font-size: 18px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .delete-card p {
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .warning-box {
+
+            padding: 13px;
+
+            border-radius: 7px;
+
+            background: #fff8e8;
+
+            border: 1px solid #f6dfaa;
+
+            color: #946200;
+
+            font-size: 11px;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .delete-actions {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+        }
+
+
+        .delete-button {
+
+            height: 38px;
+
+            padding: 0 18px;
+
+            border: none;
+
+            border-radius: 6px;
+
+            background: #dc3b3b;
+
+            color: white;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+        }
+
+
+        .delete-button:hover {
+
+            background: #c92f2f;
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="app-container">
+
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>DocManager</span>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a href="{% url 'dashboard' %}" class="menu-item">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{% url 'people' %}" class="menu-item">
+                    <i class="bi bi-people-fill"></i>
+                    <span>People</span>
+                </a>
+
+                <a href="{% url 'all_documents' %}" class="menu-item">
+                    <i class="bi bi-folder-fill"></i>
+                    <span>Documents</span>
+                </a>
+
+                <a href="{% url 'document_types' %}" class="menu-item active">
+                    <i class="bi bi-files"></i>
+                    <span>Document Types</span>
+                </a>
+
+                <a href="{% url 'recent_documents' %}" class="menu-item">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Recent</span>
+                </a>
+
+                <a href="{% url 'trash' %}" class="menu-item">
+                    <i class="bi bi-trash3-fill"></i>
+                    <span>Trash</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <a href="{% url 'settings' %}" class="menu-item">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Settings</span>
+                </a>
+
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+            </div>
+
+        </aside>
+
+
+
+        <main class="main-content">
+
+
+            <header class="topbar">
+
+                <div class="search-box">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text" placeholder="Search people, documents...">
+
+                </div>
+
+            </header>
+
+
+
+            <section class="add-type-content">
+
+
+                <a href="{% url 'document_types' %}" class="back-link">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to Document Types
+
+                </a>
+
+
+
+                <div class="delete-card">
+
+
+                    <div class="delete-icon">
+
+                        <i class="bi bi-trash3"></i>
+
+                    </div>
+
+
+                    {% if cannot_delete %}
+
+                    <h2>
+                        Cannot Delete "{{ document_type.name }}"
+                    </h2>
+
+
+                    <p>
+
+                        This document type is currently being used
+                        by uploaded documents.
+
+                    </p>
+
+
+                    <div class="warning-box">
+
+                        <i class="bi bi-exclamation-triangle"></i>
+
+                        This document type has
+                        <strong>
+                            {{ document_count }}
+                        </strong>
+                        uploaded document{{ document_count|pluralize }}.
+
+                        <br><br>
+
+                        Instead of deleting it, deactivate it.
+                        Existing documents will remain safe.
+
+                    </div>
+
+
+                    <div class="delete-actions">
+
+                        <a href="{% url 'document_types' %}" class="cancel-button">
+                            Back
+                        </a>
+
+
+                        <a href="{% url 'toggle_document_type' document_type.id %}" class="save-button">
+
+                            <i class="bi bi-toggle-off"></i>
+
+                            Deactivate
+
+                        </a>
+
+                    </div>
+
+
+                    {% else %}
+
+                    <h2>
+                        Delete "{{ document_type.name }}"?
+                    </h2>
+
+
+                    <p>
+
+                        This document type has no uploaded documents.
+                        Are you sure you want to permanently remove it?
+
+                    </p>
+
+
+                    <div class="warning-box">
+
+                        <i class="bi bi-exclamation-triangle"></i>
+
+                        This action cannot be undone.
+
+                    </div>
+
+
+                    <div class="delete-actions">
+
+                        <a href="{% url 'document_types' %}" class="cancel-button">
+
+                            Cancel
+
+                        </a>
+
+
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            <button type="submit" class="delete-button">
+
+                                <i class="bi bi-trash3"></i>
+
+                                Delete Permanently
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    {% endif %}
+
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

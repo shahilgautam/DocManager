@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users | DocManager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+</head>
+<body>
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="logo"><i class="bi bi-file-earmark-text"></i><span>DocManager</span></div>
+        <nav class="sidebar-menu">
+            <a href="{% url 'dashboard' %}" class="menu-item"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+            <a href="{% url 'people' %}" class="menu-item"><i class="bi bi-people-fill"></i><span>People</span></a>
+            <a href="{% url 'all_documents' %}" class="menu-item"><i class="bi bi-folder-fill"></i><span>Documents</span></a>
+            <a href="{% url 'document_types' %}" class="menu-item"><i class="bi bi-files"></i><span>Document Types</span></a>
+            <a href="{% url 'recent_documents' %}" class="menu-item"><i class="bi bi-clock-history"></i><span>Recent</span></a>
+            <a href="{% url 'trash' %}" class="menu-item"><i class="bi bi-trash3-fill"></i><span>Trash</span></a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="{% url 'settings' %}" class="menu-item active"><i class="bi bi-gear-fill"></i><span>Settings</span></a>
+            <form method="post" action="{% url 'logout' %}" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="menu-item logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></button>
+            </form>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="search-box"><i class="bi bi-search"></i><input type="text" placeholder="Search people, documents..."></div>
+            <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+        </header>
+
+        <section class="settings-content">
+            {% if messages %}
+                <div class="settings-messages">
+                    {% for message in messages %}
+                        <div class="settings-message {{ message.tags }}"><i class="bi bi-info-circle-fill"></i><span>{{ message }}</span></div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="settings-header">
+                <div>
+                    <h1>Users</h1>
+                    <p>Create and manage users.</p>
+                </div>
+                <a href="{% url 'add_project_user' %}" class="settings-button settings-link"><i class="bi bi-person-plus"></i>Add User</a>
+            </div>
+
+            <section class="settings-card">
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Access</th><th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>
+                                    <div class="admin-user-cell">
+                                        <div class="admin-avatar">{{ user.username|first|upper }}</div>
+                                        <div><strong>{{ user.get_full_name|default:user.username }}</strong><span>@{{ user.username }}</span></div>
+                                    </div>
+                                </td>
+                                <td>{{ user.email|default:"Not provided" }}</td>
+                                <td>
+                                    {% if user.is_active %}<span class="status-badge active">Active</span>{% else %}<span class="status-badge inactive">Inactive</span>{% endif %}
+                                </td>
+                                <td><span class="status-badge active">Full Access</span></td>
+                                <td>{{ user.last_login|date:"d M Y, h:i A"|default:"Never" }}</td>
+                                <td>
+                                    <div class="admin-actions">
+                                        <form method="post" action="{% url 'toggle_project_user' user.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="table-action">{% if user.is_active %}<i class="bi bi-person-slash"></i>Deactivate{% else %}<i class="bi bi-person-check"></i>Activate{% endif %}</button>
+                                        </form>
+                                        <form method="post" action="{% url 'delete_project_user' user.id %}" onsubmit="return confirm('Delete this project user?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="table-action danger"><i class="bi bi-trash"></i>Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="6" class="empty-state"><i class="bi bi-person-x"></i><span>No project users have been created yet.</span></td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="admin-note"><i class="bi bi-shield-lock"></i><span>Only the Django superuser can access this page. Users created here are normal users with Full Access to DocManager. They cannot create or manage superusers.</span></div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

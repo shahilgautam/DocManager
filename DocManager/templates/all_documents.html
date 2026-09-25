@@ -1,0 +1,1043 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Documents | DocManager</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard Layout -->
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    <!-- Documents Page -->
+    <link rel="stylesheet" href="{% static 'css/all_documents.css' %}">
+
+</head>
+
+
+<body>
+
+
+    <div class="app-container">
+
+
+        <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+        <aside class="sidebar">
+
+
+            <!-- LOGO -->
+
+            <div class="logo">
+
+                <i class="bi bi-file-earmark-text"></i>
+
+                <span>DocManager</span>
+
+            </div>
+
+
+            <!-- MENU -->
+
+            <nav class="sidebar-menu">
+
+
+                <!-- Dashboard -->
+
+                <a href="{% url 'dashboard' %}" class="menu-item">
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <!-- People -->
+
+                <a href="{% url 'people' %}" class="menu-item">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <span>People</span>
+
+                </a>
+
+
+                <!-- Documents -->
+
+                <a href="{% url 'all_documents' %}" class="menu-item active">
+
+                    <i class="bi bi-folder-fill"></i>
+
+                    <span>Documents</span>
+
+                </a>
+
+
+                <!-- Document Types -->
+
+                <a href="{% url 'document_types' %}" class="menu-item">
+
+                    <i class="bi bi-files"></i>
+
+                    <span>Document Types</span>
+
+                </a>
+
+
+                <!-- Recent -->
+
+                <a href="{% url 'recent_documents' %}" class="menu-item">
+
+                    <i class="bi bi-clock-history"></i>
+
+                    <span>Recent</span>
+
+                </a>
+
+
+                <!-- Trash -->
+
+                <a href="{% url 'trash' %}" class="menu-item">
+
+                    <i class="bi bi-trash3-fill"></i>
+
+                    <span>Trash</span>
+
+                </a>
+
+
+            </nav>
+
+
+            <!-- SIDEBAR BOTTOM -->
+
+            <div class="sidebar-bottom">
+
+
+                <a href="{% url 'settings' %}" class="menu-item">
+
+                    <i class="bi bi-gear-fill"></i>
+
+                    <span>Settings</span>
+
+                </a>
+
+
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+        <main class="main-content">
+
+
+            <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+            <header class="topbar">
+
+
+                <div class="search-box">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text" placeholder="Search people, documents...">
+
+                </div>
+
+
+                <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+            </header>
+
+
+
+            <!-- =================================================
+             DOCUMENT CONTENT
+        ================================================== -->
+
+            <section class="documents-content">
+
+
+                <!-- =================================================
+                 PAGE HEADER
+            ================================================== -->
+
+                <div class="documents-heading">
+
+
+                    <div>
+
+                        <h1>
+                            Documents
+                        </h1>
+
+                        <p>
+                            Manage and organize all uploaded documents.
+                        </p>
+
+                    </div>
+
+
+                    <a href="{% url 'upload_document_general' %}" class="document-primary-button">
+
+                        <i class="bi bi-cloud-arrow-up"></i>
+
+                        Upload Document
+
+                    </a>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                 SEARCH TOOLBAR
+            ================================================== -->
+
+                <div class="document-toolbar">
+
+
+                    <form method="GET" class="document-search">
+
+                        <i class="bi bi-search"></i>
+
+
+                        <input type="text" name="search" value="{{ search }}"
+                            placeholder="Search documents, people or document types...">
+
+
+                        <button type="submit">
+
+                            Search
+
+                        </button>
+
+                    </form>
+
+
+                    <!-- VIEW BUTTONS -->
+
+                    <div class="document-view-buttons">
+
+
+                        <button type="button" id="gridButton" class="document-view-button active" onclick="showGrid()"
+                            title="Grid View">
+
+                            <i class="bi bi-grid-3x3-gap"></i>
+
+                        </button>
+
+
+                        <button type="button" id="listButton" class="document-view-button" onclick="showList()"
+                            title="List View">
+
+                            <i class="bi bi-list"></i>
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                 FILTERS
+            ================================================== -->
+
+                <form method="GET" class="document-filters">
+
+
+                    <!-- Preserve Search -->
+
+                    <input type="hidden" name="search" value="{{ search }}">
+
+
+                    <!-- Document Type -->
+
+                    <select name="document_type" class="document-filter" onchange="this.form.submit()">
+
+                        <option value="">
+                            All Types
+                        </option>
+
+
+                        {% for type in document_types %}
+
+                        <option value="{{ type.id }}" {% if selected_document_type == type.id %} selected {% endif %}>
+
+                            {{ type.name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+
+
+                    <!-- Person Type -->
+
+                    <select name="person_type" class="document-filter" onchange="this.form.submit()">
+
+                        <option value="">
+                            All People
+                        </option>
+
+
+                        <option value="student" {% if selected_person_type == "student" %} selected {% endif %}>
+
+                            Students
+
+                        </option>
+
+
+                        <option value="employee" {% if selected_person_type == "employee" %} selected {% endif %}>
+
+                            Employees
+
+                        </option>
+
+                    </select>
+
+
+
+                    <!-- Status -->
+
+                    <select name="status" class="document-filter" onchange="this.form.submit()">
+
+                        <option value="">
+                            All Status
+                        </option>
+
+
+                        <option value="submitted" {% if selected_status == "submitted" %} selected {% endif %}>
+
+                            Submitted
+
+                        </option>
+
+
+                        <option value="rejected" {% if selected_status == "rejected" %} selected {% endif %}>
+
+                            Rejected
+
+                        </option>
+
+                    </select>
+
+
+
+                    <!-- Clear -->
+
+                    {% if search or selected_document_type or selected_person_type or selected_status %}
+
+                    <a href="{% url 'all_documents' %}" class="clear-filter">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Clear Filters
+
+                    </a>
+
+                    {% endif %}
+
+
+                </form>
+
+
+
+                <!-- =================================================
+                 DOCUMENT TYPE FOLDERS
+            ================================================== -->
+
+                <section class="document-section">
+
+
+                    <div class="document-section-header">
+
+
+                        <div>
+
+                            <h2>
+                                Document Categories
+                            </h2>
+
+                            <p>
+                                Browse documents by type
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="folder-grid">
+
+
+                        {% for type in document_types %}
+
+
+                        <a href="{% url 'all_documents' %}?document_type={{ type.id }}" class="folder-card">
+
+
+                            <div class="folder-icon">
+
+                                <i class="bi bi-folder-fill"></i>
+
+                            </div>
+
+
+                            <div class="folder-info">
+
+                                <h3>
+                                    {{ type.name }}
+                                </h3>
+
+                                <span>
+                                    {{ type.active_document_count }}
+                                    document{{ type.documents.count|pluralize }}
+                                </span>
+
+                            </div>
+
+
+                            <i class="bi bi-three-dots folder-menu"></i>
+
+
+                        </a>
+
+
+                        {% empty %}
+
+
+                        <div class="empty-folder">
+
+                            <i class="bi bi-folder-x"></i>
+
+                            <p>
+                                No document categories available.
+                            </p>
+
+                        </div>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                 RECENT DOCUMENTS / ALL RESULTS
+            ================================================== -->
+
+                <section class="document-section">
+
+
+                    <div class="document-section-header">
+
+
+                        <div>
+
+                            <h2>
+                                Recent Documents
+                            </h2>
+
+                            <p>
+                                Latest uploaded files
+                            </p>
+
+                        </div>
+
+
+                        <a href="{% url 'recent_documents' %}">
+
+                            View Recent
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </a>
+
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                     GRID VIEW
+                ================================================== -->
+
+                    <div class="document-grid" id="documentGrid">
+
+
+                        {% for document in documents %}
+
+
+                        <div class="document-card">
+
+
+                            <!-- CARD TOP -->
+
+                            <div class="document-card-top">
+
+
+                                <!-- FILE ICON -->
+
+                                {% if ".pdf" in document.file.name|lower %}
+
+                                <div class="file-icon pdf">
+
+                                    <i class="bi bi-file-earmark-pdf"></i>
+
+                                </div>
+
+
+                                {% elif ".doc" in document.file.name|lower %}
+
+                                <div class="file-icon word">
+
+                                    <i class="bi bi-file-earmark-word"></i>
+
+                                </div>
+
+
+                                {% elif ".xls" in document.file.name|lower %}
+
+                                <div class="file-icon excel">
+
+                                    <i class="bi bi-file-earmark-excel"></i>
+
+                                </div>
+
+
+                                {% elif ".jpg" in document.file.name|lower or ".jpeg" in document.file.name|lower or
+                                ".png" in document.file.name|lower %}
+
+                                <div class="file-icon image">
+
+                                    <i class="bi bi-file-earmark-image"></i>
+
+                                </div>
+
+
+                                {% else %}
+
+                                <div class="file-icon">
+
+                                    <i class="bi bi-file-earmark"></i>
+
+                                </div>
+
+                                {% endif %}
+
+
+
+                                <!-- DELETE -->
+
+                                <form method="POST" action="{% url 'move_to_trash' document.id %}"
+                                    onsubmit="return confirm('Move this document to Trash?');">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="document-more" title="Move to Trash">
+
+                                        <i class="bi bi-trash3"></i>
+
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+
+
+                            <!-- DOCUMENT INFO -->
+
+                            <div class="document-info">
+
+
+                                <h3 title="{{ document.file_name }}">
+
+                                    {{ document.file_name }}
+
+                                </h3>
+
+
+                                <span class="document-type">
+
+                                    {{ document.document_type.name }}
+
+                                </span>
+
+
+                            </div>
+
+
+
+                            <!-- PERSON -->
+
+                            <div class="document-person">
+
+
+                                <div class="person-avatar">
+
+                                    {{ document.person.name|first|upper }}
+
+                                </div>
+
+
+                                <div>
+
+                                    <strong>
+                                        {{ document.person.name }}
+                                    </strong>
+
+                                    <small>
+                                        {{ document.person.person_id }}
+                                    </small>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <!-- FOOTER -->
+
+                            <div class="document-footer">
+
+
+                                {% if document.status == "submitted" %}
+
+                                <span class="document-status submitted">
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                    Submitted
+
+                                </span>
+
+
+                                {% elif document.status == "rejected" %}
+
+                                <span class="document-status rejected">
+
+                                    <i class="bi bi-x-circle-fill"></i>
+
+                                    Rejected
+
+                                </span>
+
+
+                                {% endif %}
+
+
+                                <a href="{{ document.file.url }}" target="_blank" class="document-open">
+
+                                    Open
+
+                                    <i class="bi bi-box-arrow-up-right"></i>
+
+                                </a>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        {% empty %}
+
+
+                        <div class="empty-documents">
+
+
+                            <div class="empty-icon">
+
+                                <i class="bi bi-file-earmark-x"></i>
+
+                            </div>
+
+
+                            <h3>
+                                No Documents Found
+                            </h3>
+
+
+                            <p>
+                                Upload a document or change your filters.
+                            </p>
+
+
+                            <a href="{% url 'upload_document_general' %}" class="empty-button">
+
+                                Upload Document
+
+                            </a>
+
+
+                        </div>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                     LIST VIEW
+                ================================================== -->
+
+                    <div class="document-list" id="documentList">
+
+
+                        <div class="list-header">
+
+
+                            <div>
+                                Document
+                            </div>
+
+                            <div>
+                                Person
+                            </div>
+
+                            <div>
+                                Type
+                            </div>
+
+                            <div>
+                                Status
+                            </div>
+
+                            <div>
+                                Date
+                            </div>
+
+                            <div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        {% for document in documents %}
+
+
+                        <div class="list-row">
+
+
+                            <!-- DOCUMENT -->
+
+                            <div class="list-document-name">
+
+
+                                {% if ".pdf" in document.file.name|lower %}
+
+                                <div class="list-file-icon">
+
+                                    <i class="bi bi-file-earmark-pdf"></i>
+
+                                </div>
+
+
+                                {% elif ".doc" in document.file.name|lower %}
+
+                                <div class="list-file-icon">
+
+                                    <i class="bi bi-file-earmark-word"></i>
+
+                                </div>
+
+
+                                {% elif ".xls" in document.file.name|lower %}
+
+                                <div class="list-file-icon">
+
+                                    <i class="bi bi-file-earmark-excel"></i>
+
+                                </div>
+
+
+                                {% elif ".jpg" in document.file.name|lower or ".jpeg" in document.file.name|lower or
+                                ".png" in document.file.name|lower %}
+
+                                <div class="list-file-icon">
+
+                                    <i class="bi bi-file-earmark-image"></i>
+
+                                </div>
+
+
+                                {% else %}
+
+                                <div class="list-file-icon">
+
+                                    <i class="bi bi-file-earmark"></i>
+
+                                </div>
+
+                                {% endif %}
+
+
+                                <div>
+
+                                    <strong>
+
+                                        {{ document.file_name }}
+
+                                    </strong>
+
+                                    <small>
+
+                                        {{ document.document_type.name }}
+
+                                    </small>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <!-- PERSON -->
+
+                            <div class="list-person">
+
+
+                                <div class="small-avatar">
+
+                                    {{ document.person.name|first|upper }}
+
+                                </div>
+
+
+                                <span>
+
+                                    {{ document.person.name }}
+
+                                </span>
+
+
+                            </div>
+
+
+
+                            <!-- TYPE -->
+
+                            <div class="list-type">
+
+                                {{ document.document_type.name }}
+
+                            </div>
+
+
+
+                            <!-- STATUS -->
+
+                            <div>
+
+
+                                {% if document.status == "submitted" %}
+
+                                <span class="list-status submitted">
+
+                                    Submitted
+
+                                </span>
+
+
+                                {% elif document.status == "rejected" %}
+
+                                <span class="list-status rejected">
+
+                                    Rejected
+
+                                </span>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <!-- DATE -->
+
+                            <div class="list-date">
+
+                                {{ document.uploaded_at|date:"d M Y" }}
+
+                            </div>
+
+
+
+                            <!-- OPEN -->
+
+                            <div>
+
+                                <a href="{{ document.file.url }}" target="_blank" class="list-open"
+                                    title="Open Document">
+
+                                    <i class="bi bi-box-arrow-up-right"></i>
+
+                                </a>
+
+                            </div>
+
+
+                        </div>
+
+
+                        {% empty %}
+
+
+                        <div class="list-empty">
+
+                            No documents found.
+
+                        </div>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                </section>
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <!-- =========================================================
+     GRID / LIST JAVASCRIPT
+========================================================= -->
+
+    <script>
+
+        function showGrid() {
+
+            const grid =
+                document.getElementById("documentGrid");
+
+            const list =
+                document.getElementById("documentList");
+
+            const gridButton =
+                document.getElementById("gridButton");
+
+            const listButton =
+                document.getElementById("listButton");
+
+
+            grid.style.display = "grid";
+
+            list.style.display = "none";
+
+
+            gridButton.classList.add("active");
+
+            listButton.classList.remove("active");
+
+        }
+
+
+        function showList() {
+
+            const grid =
+                document.getElementById("documentGrid");
+
+            const list =
+                document.getElementById("documentList");
+
+            const gridButton =
+                document.getElementById("gridButton");
+
+            const listButton =
+                document.getElementById("listButton");
+
+
+            grid.style.display = "none";
+
+            list.style.display = "block";
+
+
+            gridButton.classList.remove("active");
+
+            listButton.classList.add("active");
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>

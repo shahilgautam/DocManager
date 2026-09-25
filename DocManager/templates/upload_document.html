@@ -1,0 +1,419 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Document | DocManager</title>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/add_person.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/upload_document.css' %}">
+
+</head>
+
+
+<body>
+
+    <div class="app-container">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+
+                <i class="bi bi-file-earmark-text"></i>
+
+                <span>DocManager</span>
+
+            </div>
+
+
+            <nav class="sidebar-menu">
+
+                <a href="{% url 'dashboard' %}" class="menu-item">
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <a href="{% url 'people' %}" class="menu-item active">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <span>People</span>
+
+                </a>
+
+
+                <a href="{% url 'all_documents' %}" class="menu-item">
+
+                    <i class="bi bi-folder-fill"></i>
+
+                    <span>Documents</span>
+
+                </a>
+
+
+                <a href="{% url 'document_types' %}" class="menu-item">
+
+                    <i class="bi bi-files"></i>
+
+                    <span>Document Types</span>
+
+                </a>
+
+
+                <a href="{% url 'recent_documents' %}" class="menu-item">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Recent</span>
+                </a>
+
+                <a href="{% url 'trash' %}" class="menu-item">
+
+                    <i class="bi bi-trash3-fill"></i>
+
+                    <span>Trash</span>
+
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <a href="{% url 'settings' %}" class="menu-item">
+
+                    <i class="bi bi-gear-fill"></i>
+
+                    <span>Settings</span>
+
+                </a>
+
+
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- MAIN -->
+
+        <main class="main-content">
+
+
+            <!-- TOPBAR -->
+
+            <header class="topbar">
+
+                <div class="search-box">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text" placeholder="Search people, documents...">
+
+                </div>
+
+
+                <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+
+            </header>
+
+
+
+            <!-- CONTENT -->
+
+            <section class="upload-content">
+
+
+                <a href="{% url 'person_profile' person.id %}" class="back-link">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to {{ person.name }}
+
+                </a>
+
+
+
+                <div class="page-heading">
+
+                    <h1>Upload Document</h1>
+
+                    <p>
+                        Add a document to {{ person.name }}'s profile.
+                    </p>
+
+                </div>
+
+
+
+                <!-- PERSON -->
+
+                <div class="upload-person-card">
+
+                    <div class="upload-person-avatar">
+
+                        {{ person.name|first|upper }}
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            {{ person.name }}
+                        </strong>
+
+                        <span>
+                            {{ person.person_id }}
+                            ·
+                            {{ person.get_person_type_display }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FORM -->
+
+                <div class="upload-card">
+
+
+                    <div class="upload-header">
+
+                        <div class="upload-icon">
+
+                            <i class="bi bi-cloud-arrow-up"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Upload a Document
+                            </h2>
+
+                            <p>
+                                Select the document type and choose your file.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <form method="POST" enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+
+                        {% if form.non_field_errors %}
+
+                        <div class="form-error">
+
+                            {{ form.non_field_errors }}
+
+                        </div>
+
+                        {% endif %}
+
+
+
+                        <!-- DOCUMENT TYPE -->
+
+                        <div class="upload-form-group">
+
+                            <label for="{{ form.document_type.id_for_label }}">
+
+                                Document Type
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            {{ form.document_type }}
+
+
+                            {% if form.document_type.errors %}
+
+                            <div class="field-error">
+
+                                {{ form.document_type.errors }}
+
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- FILE -->
+
+                        <div class="upload-form-group">
+
+                            <label for="{{ form.file.id_for_label }}">
+
+                                Select File
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="file-drop-area">
+
+                                <i class="bi bi-file-earmark-arrow-up"></i>
+
+
+                                <strong>
+                                    Choose a file
+                                </strong>
+
+
+                                <span>
+                                    PDF, TXT, DOCX, XLSX, JPG, PNG
+                                </span>
+
+
+                                {{ form.file }}
+
+                            </div>
+
+
+                            {% if form.file.errors %}
+
+                            <div class="field-error">
+
+                                {{ form.file.errors }}
+
+                            </div>
+
+                            {% endif %}
+
+
+                            <small class="file-help">
+                                Maximum file size: 10 MB
+                            </small>
+
+                        </div>
+
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="upload-actions">
+
+                            <a href="{% url 'person_profile' person.id %}" class="cancel-button">
+
+                                Cancel
+
+                            </a>
+
+
+                            <button type="submit" class="save-button">
+
+                                <i class="bi bi-cloud-arrow-up"></i>
+
+                                Upload Document
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script>
+
+        const fileInput =
+            document.querySelector(".file-input");
+
+        const fileDropArea =
+            document.querySelector(".file-drop-area");
+
+
+        if (fileInput && fileDropArea) {
+
+            fileInput.addEventListener(
+                "change",
+                function () {
+
+                    if (this.files.length > 0) {
+
+                        const fileName =
+                            this.files[0].name;
+
+                        fileDropArea.classList.add(
+                            "file-selected"
+                        );
+
+
+                        fileDropArea.querySelector(
+                            "strong"
+                        ).textContent = fileName;
+
+                    }
+
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,399 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>People | DocManager</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/people.css' %}">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>DocManager</span>
+            </div>
+
+            <nav class="sidebar-menu">
+
+                <a href="{% url 'dashboard' %}" class="menu-item">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{% url 'people' %}" class="menu-item active">
+                    <i class="bi bi-people-fill"></i>
+                    <span>People</span>
+                </a>
+
+                <a href="{% url 'all_documents' %}" class="menu-item">
+                    <i class="bi bi-folder-fill"></i>
+                    <span>Documents</span>
+                </a>
+
+                <a href="{% url 'document_types' %}" class="menu-item">
+                    <i class="bi bi-files"></i>
+                    <span>Document Types</span>
+                </a>
+
+                <a href="{% url 'recent_documents' %}" class="menu-item">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Recent</span>
+                </a>
+
+                <a href="{% url 'trash' %}" class="menu-item">
+                    <i class="bi bi-trash3-fill"></i>
+                    <span>Trash</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <a href="{% url 'settings' %}" class="menu-item">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Settings</span>
+                </a>
+
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+
+                <div class="search-box">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text" placeholder="Search people, documents...">
+
+                </div>
+
+                <div class="topbar-right">
+                <div class="profile">
+                    <div class="profile-avatar">{{ request.user.get_full_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{% if request.user.is_superuser %}Superuser{% else %}User{% endif %}</small>
+                    </div>
+                    
+                </div>
+            </div>
+
+            </header>
+
+
+            <!-- PAGE -->
+            <section class="page-content">
+
+                <!-- PAGE HEADER -->
+                <div class="people-header">
+
+                    <div>
+                        <h1>People</h1>
+
+                        <p>
+                            Manage students and employees and their documents.
+                        </p>
+                    </div>
+
+                    <a href="{% url 'add_person' %}" class="primary-button">
+
+                        <i class="bi bi-person-plus"></i>
+
+                        Add Person
+
+                    </a>
+
+                </div>
+
+
+                <!-- FILTER BAR -->
+                <div class="filter-card">
+
+                    <div class="people-search">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text" placeholder="Search by name, ID, department...">
+
+                    </div>
+
+
+                    <select>
+                        <option>All Departments</option>
+                        <option>CSE</option>
+                        <option>IT</option>
+                        <option>HR</option>
+                        <option>Finance</option>
+                    </select>
+
+
+                    <select>
+                        <option>All Status</option>
+                        <option>Complete</option>
+                        <option>Incomplete</option>
+                    </select>
+
+                </div>
+
+
+                <!-- PEOPLE TABLE -->
+                <div class="people-card">
+
+                    <div class="people-card-header">
+
+                        <div>
+                            <h3>All People</h3>
+                            <p>Students and employees</p>
+                        </div>
+
+                        <span class="people-count">
+                            {{ people|length }} People
+                        </span>
+
+                    </div>
+
+
+                    <div class="people-table-container">
+
+                        <table class="people-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Department</th>
+                                    <th>Documents</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for person in people %}
+
+                                <tr>
+
+                                    <!-- ID -->
+                                    <td>
+                                        <strong>{{ person.person_id }}</strong>
+                                    </td>
+
+
+                                    <!-- NAME -->
+                                    <td>
+
+                                        <div class="person-cell">
+
+                                            <div class="person-avatar">
+                                                {{ person.name|first|upper }}
+                                            </div>
+
+                                            <div>
+
+                                                <strong>
+                                                    {{ person.name }}
+                                                </strong>
+
+                                                <small>
+                                                    {{ person.email|default:"No email provided" }}
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- TYPE -->
+                                    <td>
+
+                                        {% if person.person_type == "employee" %}
+
+                                        <span class="type employee">
+                                            Employee
+                                        </span>
+
+                                        {% else %}
+
+                                        <span class="type student">
+                                            Student
+                                        </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- DEPARTMENT -->
+                                    <td>
+                                        {{ person.department|default:"—" }}
+                                    </td>
+
+
+                                    <!-- DOCUMENTS -->
+                                    <td>
+
+                                        <strong>
+                                            {{ person.submitted_count }}
+                                            /
+                                            {{ person.total_documents }}
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+                                    <td>
+
+                                        {% if person.total_documents == 0 %}
+
+                                        <span class="status-badge incomplete">
+                                            No Requirements
+                                        </span>
+
+                                        {% elif person.missing_count == 0 %}
+
+                                        <span class="status-badge complete">
+                                            Complete
+                                        </span>
+
+                                        {% else %}
+
+                                        <span class="status-badge incomplete">
+                                            Incomplete
+                                        </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+                                    <td>
+
+                                        <div class="action-buttons">
+
+                                            <a href="{% url 'person_profile' person.id %}" title="View"
+                                                class="action-link">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+
+
+                                            <button type="button" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+
+
+                                            <button type="button" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+
+                                {% empty %}
+
+                                <tr>
+
+                                    <td colspan="7">
+
+                                        <div class="empty-people">
+
+                                            <i class="bi bi-people"></i>
+
+                                            <h4>No people found</h4>
+
+                                            <p>
+                                                Add a student or employee to get started.
+                                            </p>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- PAGINATION -->
+                    <div class="pagination">
+
+                        <button disabled>
+                            Previous
+                        </button>
+
+                        <button class="page-active">
+                            1
+                        </button>
+
+                        <button>
+                            2
+                        </button>
+
+                        <button>
+                            3
+                        </button>
+
+                        <button>
+                            Next
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
