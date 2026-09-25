@@ -1,7 +1,5 @@
 # DocManager
 
-**GitHub-Ready Project README**
-
 A Django-based Document Management System for organizing people, document types, uploaded documents, document tracking, and document lifecycle management through a centralized web interface.
 
 ## Overview
